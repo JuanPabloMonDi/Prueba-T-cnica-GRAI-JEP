@@ -1,0 +1,86 @@
+---
+title: "Prueba Técnica GRAI-JEP"
+author: "Juan Pablo Montaño"
+date: "17 de Noviembre de 2023"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(readr)
+library(readxl)
+library(dplyr)
+library(xtable)
+library(knitr)
+library(writexl)
+setwd("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica")
+knitr::opts_knit$set("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica")
+```
+
+## Análisis de víctimas
+
+El ejercicio dado en la prueba técnica consistía en identificar las posibles víctimas repetidas que se encuentran en dos bases de datos diferentes, nombradas A y B. En respuesta a esto, se muestra la tabla de víctimas obtenida, donde se identifica la base de datos de donde se reporta la víctima y además, se asigna un identificador a cada uno de ellos. Si el identificador es el mismo, significa que se consideran que estas dos víctimas son la misma.
+
+Los criterios para considerar que dos registros trataban a la misma victima eran los siguientes:
+1.Las víctimas poseen el mismo número de documento.
+2.Las víctimas poseen 2 nombres y un apellido en común.
+3.Las víctimas poseen 2 nombres y el departamento en común.
+
+Teniendo en cuenta estos criterios, se hace uso del siguiente código para realizar la respectiva clasificación de las víctimas:
+```{r}
+#Cargamos las bases de datos
+A<-read_excel("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica/input/A.xlsx")
+B<-read_excel("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica/input/B.xlsx")
+
+#Adicionamos las nuevas columnas de fuente
+A["Fuente"]<-"A"
+B["Fuente"]<-"B"
+
+#Unimos las dos tablas
+Tabla<-rbind(A,B)
+
+#Ahora vamos a idenfiticar a las victimas. Consideraremos que dos víctimas son la misma si:
+#1.Poseen el mismo número de documento
+#2.Poseen 2 nombres y un apellido en común
+#3. Poseen 2 nombres y el depto en común
+
+
+#Ahora, asignamos el identificador considerando cada caso
+casos=list(c("NOMBRE1","NOMBRE2","APELLIDO1"),c("NOMBRE1","NOMBRE2","DEPARTAMENTO"),c("NUMERO_DOCUMENTO"))
+resultados <- Tabla %>%
+  distinct(across(all_of(casos[[1]])), .keep_all = TRUE)%>%
+  distinct(across(all_of(casos[[2]])), .keep_all = TRUE) %>%
+  distinct(across(all_of(casos[[3]])), .keep_all = TRUE)
+ #Asignamos un número identificador (comenzando desde 1) para cada víctima considerada diferente
+resultados$Identificador<-seq_len(nrow(resultados))
+# Mezclamos la tabla de victimas con su identificador
+ TablaId <- merge(Tabla, resultados, by = c("NOMBRE1","NOMBRE2","NUMERO_DOCUMENTO"), all.x = TRUE)
+ TablaId<-TablaId[,c(1:12,22)]
+ TablaId<-TablaId[,c(1,2,4,5,6,7,8,9,3,10,11,12,13)]
+ colnames(TablaId)[1:12]<-colnames(Tabla)
+ TablaId<-TablaId[order(TablaId$Identificador),]
+```
+Resultando en la siguiente tabla:
+
+```{r, echo=FALSE}
+#print((TablaId), type="markdown", comment=FALSE)
+kable(TablaId, caption="Víctimas identificadas de las reportes dados en la tabla A y B. Las víctimas repetidas poseen el mismo número identificador.")
+```
+
+Una vista más concreta respecto a las víctimas repetidas en las tablas A y B, se encuentran en la siguiente tabla de contingencia
+
+```{r, echo=FALSE}
+#print((table(TablaId$Fuente,TablaId$Identificador)), type="markdown", comment=FALSE)
+kable(table(TablaId$Fuente,TablaId$Identificador),caption = "Tabla de contingencia sobre el identificador de las víctimas de las Tablas A y B.")
+```
+De esta tabla, tenemos que las víctimas 1,3,7 y 8 se encuentra cada una, en las dos tablas. Un caso particular, es el de la víctima 3, el cual se encuentra registrado 2 veces en la tabla B, con los nombres de CARLOS ALFONSO LOPEZ y CARLOS ALFONSO FLOREZ. Los otros registros son idénticos en la información de la víctima, y varían respecto al departamento, municipio o la fecha en la que ocurrieron los hechos.  También, la mayoria de estas víctimas duplicadas son del departamento de Caquetá.
+
+Es posible hacer un poco más de análisis de estos resultados, pero no lograría desarrollar la prueba técnica dentro del tiempo límite.
+
+Gracias por su atención.
+
+
+```{r, echo=FALSE}
+#Exportamos la tabla a la carpeta output.
+write_xlsx(TablaId,"Tabla.xlsx")
+
+```
