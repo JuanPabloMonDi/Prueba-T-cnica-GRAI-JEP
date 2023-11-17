@@ -12,8 +12,9 @@ library(dplyr)
 library(xtable)
 library(knitr)
 library(writexl)
-setwd("Prueba_T-cnica-GRAI-JEP")
-knitr::opts_knit$set("Prueba_Tecnica-GRAI-JEP")
+knitr::opts_knit$set("Prueba-Tecnica-GRAI-JEP")
+setwd("Prueba-Tecnica-GRAI-JEP")
+
 ```
 
 ## Análisis de víctimas
@@ -28,8 +29,8 @@ Los criterios para considerar que dos registros trataban a la misma victima eran
 Teniendo en cuenta estos criterios, se hace uso del siguiente código para realizar la respectiva clasificación de las víctimas:
 ```{r}
 #Cargamos las bases de datos
-A<-read_excel("Prueba_Tecnica-GRAI-JEP/input/A.xlsx")
-B<-read_excel("Prueba_Tecnica-GRAI-JEP/input/B.xlsx")
+A<-read_excel("Prueba-Tecnica-GRAI-JEP/input/A.xlsx")
+B<-read_excel("Prueba-Tecnica-GRAI-JEP/input/B.xlsx")
 
 #Adicionamos las nuevas columnas de fuente
 A["Fuente"]<-"A"
@@ -70,9 +71,9 @@ Una vista más concreta respecto a las víctimas repetidas en las tablas A y B, 
 
 ```{r, echo=FALSE}
 #print((table(TablaId$Fuente,TablaId$Identificador)), type="markdown", comment=FALSE)
-kable(table(TablaId$Fuente,TablaId$Identificador),caption = "Tabla de contingencia sobre el identificador de las víctimas de las Tablas A y B.")
+kable(table(TablaId$Fuente,TablaId$Identificador),caption = "Tabla de contingencia sobre el identificador de las víctimas de las tablas A y B.")
 ```
-De esta tabla, tenemos que las víctimas 1,3,7 y 8 se encuentra cada una, en las dos tablas. Un caso particular, es el de la víctima 3, el cual se encuentra registrado 2 veces en la tabla B, con los nombres de CARLOS ALFONSO LOPEZ y CARLOS ALFONSO FLOREZ. Los otros registros son idénticos en la información de la víctima, y varían respecto al departamento, municipio o la fecha en la que ocurrieron los hechos.  También, la mayoria de estas víctimas duplicadas son del departamento de Caquetá.
+De esta tabla, tenemos que las víctimas 1,3,7 y 8 se encuentra cada una en las dos tablas. Un caso particular es el de la víctima 3, el cual se encuentra registrado 2 veces en la tabla B, con los nombres de CARLOS ALFONSO LOPEZ y CARLOS ALFONSO FLOREZ. Los otros registros son idénticos en la información de la víctima, y varían minimiamente respecto al departamento, municipio o la fecha en la que ocurrieron los hechos.  También, la mayoria de estas víctimas duplicadas son del departamento de Caquetá.
 
 Es posible hacer un poco más de análisis de estos resultados, pero no lograría desarrollar la prueba técnica dentro del tiempo límite.
 
@@ -81,6 +82,7 @@ Gracias por su atención.
 
 ```{r, echo=FALSE}
 #Exportamos la tabla a la carpeta output.
-write_xlsx(TablaId,"output/Tabla.xlsx")
+write_xlsx(TablaId,"Prueba-Tecnica-GRAI-JEP/output/Tabla.xlsx")
+knitr::opts_knit$set("Prueba-Tecnica-GRAI-JEP/output")
 
 ```
