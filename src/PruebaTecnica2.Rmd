@@ -12,8 +12,8 @@ library(dplyr)
 library(xtable)
 library(knitr)
 library(writexl)
-setwd("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica")
-knitr::opts_knit$set("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica")
+setwd("Prueba_Tecnica-GRAI-JEP")
+knitr::opts_knit$set("Prueba_Tecnica-GRAI-JEP")
 ```
 
 ## Análisis de víctimas
@@ -28,8 +28,8 @@ Los criterios para considerar que dos registros trataban a la misma victima eran
 Teniendo en cuenta estos criterios, se hace uso del siguiente código para realizar la respectiva clasificación de las víctimas:
 ```{r}
 #Cargamos las bases de datos
-A<-read_excel("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica/input/A.xlsx")
-B<-read_excel("C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica/input/B.xlsx")
+A<-read_excel("Prueba_Tecnica-GRAI-JEP/input/A.xlsx")
+B<-read_excel("Prueba_Tecnica-GRAI-JEP/input/B.xlsx")
 
 #Adicionamos las nuevas columnas de fuente
 A["Fuente"]<-"A"
@@ -81,6 +81,6 @@ Gracias por su atención.
 
 ```{r, echo=FALSE}
 #Exportamos la tabla a la carpeta output.
-write_xlsx(TablaId,"Tabla.xlsx")
+write_xlsx(TablaId,"output/Tabla.xlsx")
 
 ```
