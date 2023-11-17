@@ -6,14 +6,13 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = 'C:/Users/Juan Pablo/OneDrive/Documentos/Universidad/Prueba_Tecnica')
 library(readr)
 library(readxl)
 library(dplyr)
 library(xtable)
 library(knitr)
 library(writexl)
-knitr::opts_knit$set("Prueba-Tecnica-GRAI-JEP")
-setwd("Prueba-Tecnica-GRAI-JEP")
 
 ```
 
@@ -83,6 +82,6 @@ Gracias por su atención.
 ```{r, echo=FALSE}
 #Exportamos la tabla a la carpeta output.
 write_xlsx(TablaId,"Prueba-Tecnica-GRAI-JEP/output/Tabla.xlsx")
-knitr::opts_knit$set("Prueba-Tecnica-GRAI-JEP/output")
+
 
 ```
